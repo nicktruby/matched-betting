@@ -30,9 +30,8 @@ recorded and reasoning visible. This is intended to be readable by someone else.
 ## Non-goals
 
 - **Maximising profit per offer.** Explicitly traded away for throughput.
-- **Selling this.** Outplayed's terms include a non-compete covering the membership period
-  and twelve months after, and the offer data comes from their paid product. See
-  `docs/backlog.md`.
+- **Selling this.** The offer data comes from a paid third-party product whose terms rule it
+  out. This is a personal productivity tool.
 - **Multi-user support.** Single user. A `user_id` column exists from day one as cheap
   insurance, but no auth, roles or tenancy is built.
 - **Replacing Outplayed.** Their offer discovery and odds matching is the product being paid

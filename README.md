@@ -44,17 +44,6 @@ The interesting decisions are written down rather than implied:
 | [Domain](docs/domain.md) | Matched betting concepts and the maths |
 | [Roadmap](docs/roadmap.md) | Six phases, each judged by what's usable when it ends |
 | [Decisions](docs/decisions/) | Architecture decision records |
-| [Backlog](docs/backlog.md) | Researched and deliberately deferred |
-
-A few principles that shape everything else:
-
-- **Money is integer pence, never floats.** The spreadsheet being replaced contains values
-  like `-0.17879999999998475` in a profit column — that's the class of bug this prevents.
-  ([ADR 0002](docs/decisions/0002-money-as-integer-pence.md))
-- **The ledger is append-only.** Corrections are new entries, so any balance can be explained
-  by decomposing it. ([ADR 0003](docs/decisions/0003-append-only-ledger.md))
-- **The UI talks to the app only through its own HTTP API**, so automated clients later cost
-  nothing. ([ADR 0004](docs/decisions/0004-ui-talks-to-app-via-http-api.md))
 
 ## Stack
 

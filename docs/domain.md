@@ -84,18 +84,16 @@ rises with odds.
 
 ## Offer types
 
-| Type | Mechanics | Back odds known? |
-|---|---|---|
-| **Bet-and-get** | Bet £X, receive a free bet. Qualifier then free bet. | Up front |
-| **Price boost** | Enhanced odds on a selection, usually time-limited | Only at placement |
-| **Refund-if** | Stake refunded as a free bet if a condition occurs | Up front, different maths |
-| **Bet club** | Weekly recurring: bet £X across the week, get a free bet | Up front |
-| **Bet builder / correct score** | Bookmaker combination bet, hedged against a correct-score market | **Only after building it** |
+| Type | Mechanics |
+|---|---|
+| **Bet-and-get** | Bet £X, receive a free bet. Qualifier, then the free bet. |
+| **Price boost** | Enhanced odds on a selection, usually time-limited |
+| **Refund-if** | Stake refunded as a free bet if a condition occurs |
+| **Bet club** | Weekly recurring: bet £X across the week, get a free bet |
+| **Bet builder / correct score** | Bookmaker combination bet, hedged against a correct-score market |
 
-The last one matters architecturally: a bet builder's price isn't known until it's been
-constructed at the bookmaker, and it lands slightly below the equivalent direct correct-score
-price. So **back odds are always reported by the user at confirmation time** — no odds feed
-can supply them.
+A bet builder's price isn't known until it has been constructed at the bookmaker, and it
+lands slightly below the equivalent direct correct-score price.
 
 ### Deferred
 

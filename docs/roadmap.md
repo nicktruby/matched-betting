@@ -19,6 +19,13 @@ it's first — it's useful on its own, on day one.
 Includes the full calculation library with tests: qualifier, SR, SNR, price boost, refund-if
 with the retention parameter, rounding behaviour and worst-case reporting.
 
+**Decisions to make in this phase:**
+- How money is represented in storage and in code. Floating point is how the current
+  spreadsheet produces values like `-0.17879999999998475` in a profit column; whatever
+  replaces it needs deciding before the first amount is stored.
+- Whether the UI reaches the database directly or goes through the app's own HTTP API.
+  Relevant now because automated clients are a later goal.
+
 *Not in this phase:* accounts, balances, history, offers, notifications.
 
 ## Phase 2 — Accounts and balances
@@ -27,6 +34,10 @@ Bookmaker and exchange accounts with owner and gubbed status. Deposits and withd
 Balances **derived** from logged bets and money movements, never hand-typed. And the balance
 check: expected position against actual observed balances, with the gap surfaced and
 resolved by an explicit adjustment that records *why*.
+
+**Decisions to make in this phase:** whether the ledger is append-only with derived balances,
+or balances are stored and updated. This determines whether a discrepancy can be explained or
+only observed.
 
 Replaces the `ACCOUNTS` and `SUMMARY` sheets.
 
@@ -67,8 +78,8 @@ design work went, and where all of the terms-of-service and integration complexi
 delivers nothing until everything above it works. Manual entry from Phase 1 remains the
 permanent fallback.
 
-See `docs/backlog.md` for what has already been researched here — including existing
-matched-betting skills in this environment that may already cover parts of it.
+Prior research on this phase lives in the issue tracker under the Phase 6 milestone, rather
+than in a document that would go stale before it was needed.
 
 ---
 
