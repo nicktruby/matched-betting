@@ -1,0 +1,24 @@
+node_modules/
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+.env
+.env.*
+!.env.example
+
+# never commit personal financial data
+data/
+*.db
+*.sqlite
+*.xlsx
+*.xls
+*.csv
+
+.idea/
+.vscode/
+.DS_Store
+*.log
+coverage/
