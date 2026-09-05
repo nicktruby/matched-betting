@@ -8,17 +8,12 @@ automates the parts that can safely be automated.
 
 ## Why it exists
 
-Matched betting is profitable, but it costs sitting-down time — so it doesn't get done. The
-pattern in the spreadsheet this replaces is stark: the best month of the year cleared roughly
-£900, while two other months cleared essentially nothing between them.
-
-That variance isn't skill or margin. It's whether there was time. **The constraint is
-attention, so that's what the system optimises for** — offers completed per unit of effort,
-not profit squeezed out of each bet.
+Matched betting is profitable but costs sitting-down time, so it doesn't get done. More profit
+comes from completing more offers quickly than from chasing the maximum on any single one — so
+**time saved is what this optimises for**.
 
 The second problem is bookkeeping. Everything currently lives in a spreadsheet with
-hand-maintained balances, which drift. It presently disagrees with its own derived expectation,
-and there's no way to find out why.
+hand-maintained balances. That is slow, it drifts, and it is open to human error.
 
 ## What it does
 

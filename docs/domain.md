@@ -12,75 +12,71 @@ A *matched bet* has two legs placed at the same time:
 - **Lay** — at a betting exchange, betting that the same thing *won't* happen. This is the
   leg that can be automated.
 
-Together they cancel out, so the outcome of the event barely matters. The profit comes from
+Together they cancel out, so the outcome of the event does not matter. The profit comes from
 the bookmaker's promotion, not from predicting anything.
 
-## Notation
+## What the calculation has to handle
 
-`B` back stake · `b` back odds (decimal) · `l` lay odds (decimal) · `c` commission as a
-fraction (2% → `0.02`)
+Each offer type stakes differently, and the lay stake follows from the back stake, both sets
+of odds, and the exchange commission:
 
-Stored as integers: money in **pence**, odds in **milli-odds** (5.4 → `5400`), commission in
-**basis points** (2% → `200`).
+- **Qualifying bet** — the ordinary case. A small controlled loss, in exchange for unlocking
+  the promotion.
+- **Free bet, stake returned (SR)** — behaves like a qualifier.
+- **Free bet, stake not returned (SNR)** — the common case. The bookmaker keeps the stake, so
+  only the winnings are yours, and the lay stake is correspondingly smaller.
+- **Price boost** — mechanically a qualifier at enhanced odds. The boosted price appears in no
+  odds feed, so it can only come from the person placing the bet.
+- **Refund-if** — genuinely different, see below.
 
-## Lay stake formulas
+The formulas themselves are standard and belong in tested code rather than in prose, where
+they cannot be verified. Phase 1 specifies them as tests.
 
-**Qualifying bet, or a free bet where the stake is returned (SR):**
+### Conventions that are decisions, not maths
 
-```
-layStake  = (b × B) / (l − c)
-liability = layStake × (l − 1)
-```
+**Refund-if staking depends on a judgement.** You stake so a winning back settles the offer
+outright, while a losing back leaves you holding a free bet — so the correct stake depends on
+what that free bet is actually *worth* when redeemed. Typically somewhere around 70–80% of its
+face value, but that figure encodes your own ability to redeem it well. It must be a
+configurable parameter, never a hardcoded constant.
 
-**Free bet, stake not returned (SNR)** — the common case. The bookmaker keeps the stake, so
-only the winnings are yours:
+**Report the worst case, never the average.** Exchanges round stakes to two decimal places, so
+after rounding the two outcomes stop matching exactly. Both should be calculated and the worse
+one shown.
 
-```
-layStake  = ((b − 1) × B) / (l − c)
-```
-
-**Price boost** — identical to the qualifier formula, using the *boosted* odds. The subtlety
-is that the boosted price is not in any odds feed, so `b` must come from the user.
-
-**Refund-if** — a genuinely different formula, not a variation. You stake so that a winning
-back settles it outright, while a losing back leaves you holding a free bet with its own
-value:
-
-```
-layStake = (b × B − R × r) / (l − c)
-```
-
-`R` is the refund's face value and `r` is **retention** — what a free bet is actually worth
-when redeemed, typically 0.70–0.80. Retention is a *configurable parameter*, not a constant:
-it encodes a judgement about your own redemption ability and it moves the stake materially.
-
-## Outcomes
-
-Always compute **both** and report the worst case, never the average.
-
-| | Qualifier / SR | Free bet SNR |
-|---|---|---|
-| Bookmaker wins | `B(b−1) − layStake(l−1)` | `B(b−1) − layStake(l−1)` |
-| Exchange wins | `layStake(1−c) − B` | `layStake(1−c)` |
-
-Exchanges round stakes to 2dp, so after rounding the two outcomes stop matching exactly.
-**Underlay by default** — round the lay stake down, which biases the residual toward the
+**Underlay by default.** Round the lay stake down, which biases the residual toward the
 bookmaker-wins side.
 
-## Rating and SNR percentage
+## Rating, SNR, and why the best price is the wrong target
 
-Outplayed's oddsmatcher publishes two numbers. Both assume **0% commission**:
+Two numbers describe the same pair of odds:
 
 ```
-rating = (b / l)     × 100      → for qualifiers; want close to or above 100
-snr    = ((b − 1)/l) × 100      → for free bets; want as high as possible
+rating = b / l          snr = (b − 1) / l
 ```
 
-Verified against live data: back 1.91 / lay 1.76 → rating 108.52; snr 51.7.
+They differ only by `1/l`, so `rating = snr + 1/l`.
 
-The two objectives pull in opposite directions. Qualifiers want *low* odds with a tight
-back/lay gap, minimising qualifying loss. Free bets want *high* odds, because SNR retention
-rises with odds.
+**Rating above 100% is arbitrage** — back odds exceed lay odds, so the bet profits whatever
+happens. It is also the clearest signal a bookmaker has that an account is not a normal
+punter, and it is the fastest route to being gubbed.
+
+**So the objective is not the best available price.** It is a small, controlled loss that
+looks like ordinary losing punting, while the profit comes from the promotion. An account that
+survives is worth far more than an extra few pence per bet.
+
+Expressed as SNR, the arbitrage threshold **moves with the odds**:
+
+```
+snr is arbitrage above (1 − 1/l) × 100
+```
+
+At lay odds of 5 that threshold is 80%; at 10 it is 90%; at 20 it is 95%. A fixed SNR target
+that is safe at long odds can therefore be arbitrage at short ones — which is one reason free
+bets are taken at high odds.
+
+**The safe check is always on rating, whatever the bet type.** Target bands are a matter of
+personal risk appetite and belong in configuration, not in this document.
 
 ## Offer types
 
@@ -97,9 +93,11 @@ lands slightly below the equivalent direct correct-score price.
 
 ### Deferred
 
-- **Accumulators** — no exchange offers a single acca lay. The technique is laying each leg
-  as it settles, which *is* possible via API but is stateful, with liability shifting as legs
-  land. Hard, not impossible.
+- **Accumulators** — Smarkets supports multiples directly: select two or more selections,
+  choose "multiple", and the resulting bet can be sold or laid. This is straightforward
+  manually on their website. Whether it is reachable through their API is unconfirmed, and
+  that is the open question rather than whether it is possible at all. The fallback technique,
+  laying each leg as it settles, is stateful and awkward — liability shifts as legs land.
 - **2Up** and **extra place** — not currently part of the user's routine.
 
 ## Gubbing
@@ -111,10 +109,10 @@ bookmaker**.
 Consequences for the model:
 
 - Accounts carry a status: active, restricted, gubbed, closed.
-- Accounts carry an **owner**. Eligibility is per person: a signup offer cannot be claimed
-  twice by the same individual, and a gubbing applies to one person at one bookmaker. The
-  ledger treats all accounts as one pot of money while tracking ownership separately, so
-  offers can be matched to accounts that are actually eligible for them.
+- Accounts are recorded by **account name**, which is enough to make ownership obvious from
+  the email address used. Eligibility is per person — a signup offer cannot be claimed twice
+  by the same individual — but that does not need a separate ownership model to represent.
+  All accounts are one pot of money.
 - A gubbed account must be excluded from offer suggestions for that bookmaker.
 
 ## Free bet lifecycle
