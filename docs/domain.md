@@ -44,8 +44,10 @@ configurable parameter, never a hardcoded constant.
 after rounding the two outcomes stop matching exactly. Both should be calculated and the worse
 one shown.
 
-**Underlay by default.** Round the lay stake down, which biases the residual toward the
-bookmaker-wins side.
+**Balance both outcomes by default.** Lay so the bookmaker-wins and exchange-wins outcomes pay
+the same. Underlaying or overlaying shifts money between those outcomes at **identical expected
+value** — it only changes variance — so there is no long-run gain to be had by favouring
+either side, and the default should be the one with no swings.
 
 ## Rating, SNR, and why the best price is the wrong target
 

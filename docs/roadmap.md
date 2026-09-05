@@ -60,10 +60,18 @@ queue of work: add a task, order it, work through it, mark it done.
 Still no external integration — tasks are entered by hand. This proves the workflow shape
 before anything automates it.
 
-## Phase 5 — Phone and notifications
+## Phase 5 — Hosting, accounts and notifications
 
-Progressive web app, installed to the home screen, with Web Push. This is where the
-"open phone, place bet, confirm, done" experience becomes real.
+The app becomes reachable from a phone: progressive web app, installed to the home screen,
+with Web Push. This is where "open phone, place bet, confirm, done" becomes real.
+
+**Authentication lands here**, because a financial app reachable over a network needs it
+whether there is one user or several. Since that work is unavoidable, this is also where
+multi-user support arrives — the additional cost over single-user-with-auth is scoping queries
+by user, which the schema has carried since Phase 1.
+
+**Decisions to make in this phase:** how sessions and credentials are handled, and how data
+isolation between users is tested rather than assumed.
 
 Requires HTTPS — a secure context is mandatory for service workers and push, and an iPhone
 on a plain local address will never receive a notification. How that is served is a hosting

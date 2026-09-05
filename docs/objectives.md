@@ -41,10 +41,23 @@ correct-score markets.
 
 Deferred: accumulators, 2Up, extra place. See `docs/domain.md`.
 
+## Who uses it
+
+The **ledger** is intended to support more than one person. It replaces a spreadsheet, and
+that is a problem other people have — so it should not be built in a way that assumes a single
+user. Every table carries a user from the start, even while there is only one.
+
+The **automation** is personal. A local agent making decisions on a machine at home is not
+something to share, and it has different constraints. The two talk over the app's HTTP API,
+which means they can be deployed together or separately without changing either.
+
+Authentication arrives when the app becomes reachable over a network — required at that point
+whether there is one user or several, so multi-user support is largely a free rider on work
+that has to happen anyway.
+
 ## Non-goals
 
-- **Multi-user support.** Single user. No auth, roles or tenancy.
 - **Selling this.** The offer data comes from a paid third-party product whose terms rule it
-  out. Personal tool only.
+  out. Sharing the ledger with someone who wants it is not the same as selling a product.
 - **Replacing the offer provider.** Their offer discovery and odds matching is the thing being
   paid for. This system organises the work around it and keeps the records.

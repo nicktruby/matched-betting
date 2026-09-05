@@ -31,8 +31,6 @@ step stays manual by design — everything around it is fair game.
 
 ## Design notes
 
-The interesting decisions are written down rather than implied:
-
 | | |
 |---|---|
 | [Objectives](docs/objectives.md) | The problem and how success is measured |
@@ -46,5 +44,4 @@ Undecided, deliberately. Being chosen one decision at a time, each recorded as a
 
 ## Contributing
 
-`main` is protected: every change arrives by pull request. Decisions of any significance get
-an ADR before the code that implements them.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
