@@ -1,5 +1,5 @@
 ---
-description: Work through pull request review comments and reply to every thread
+description: Revise a pull request in response to review feedback, replying to every thread
 ---
 
 Address the review on: $ARGUMENTS (default: the PR for the current branch)

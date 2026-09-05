@@ -28,5 +28,5 @@ The rules most easily broken, stated here because this file is always loaded:
    PR comments all begin with `🤖 Claude:` followed by a line break, then the content. A reader
    should never have to work out whether a human or an agent wrote something.
 6. **Answer review comments in their own thread**, one reply each — never a single summary
-   comment. Make the change first, then reply describing what was done. `/address-review`.
+   comment. Make the change first, then reply describing what was done. `/revise-pr`.
 
