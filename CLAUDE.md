@@ -24,4 +24,7 @@ The rules most easily broken, stated here because this file is always loaded:
 3. **This repository is public.** Never commit real financial figures, credentials, or notes
    documenting a third party's security weakness or terms breach.
 4. **Every real decision gets an ADR** in `docs/decisions/`, written before the code. `/new-adr`.
+5. **Sign every comment you post.** Replies to pull request review threads, issue comments and
+   PR comments all begin with `🤖 Claude:` followed by a line break, then the content. A reader
+   should never have to work out whether a human or an agent wrote something.
 
