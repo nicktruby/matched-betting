@@ -25,6 +25,56 @@ Branch names describe the work:
 **Nobody merges their own work without reading the diff.** For AI agents, this is absolute:
 open the pull request and stop. The review is the point of the process, not a formality.
 
+## Commit messages and PR titles
+
+[Conventional Commits](https://www.conventionalcommits.org): `type(scope): description`.
+
+```
+feat(ledger): add lay stake calculation
+fix: correct arbitrage threshold for SNR bets
+docs: record the offer provider position
+```
+
+| Type | For |
+|---|---|
+| `feat` | a new capability |
+| `fix` | a bug fix |
+| `docs` | documentation only |
+| `test` | adding or correcting tests |
+| `refactor` | neither fixes a bug nor adds a feature |
+| `perf` | performance |
+| `style` | formatting only, no behaviour change |
+| `build` | build system or dependencies |
+| `ci` | CI configuration |
+| `chore` | anything else not touching source or tests |
+| `revert` | reverts an earlier commit |
+
+`!` before the colon marks a breaking change: `feat(ledger)!: …`
+
+**Scope is the area of code** — `ledger`, `agent`, `domain` — not a ticket number. It is
+optional, and worth using once there is more than one package.
+
+**PR titles follow the same convention.** `main` requires linear history, so merges are
+squashed, and the repository is configured to build the squash commit from the PR title and
+body. Your PR title becomes permanent history.
+
+**Issue references go in the footer, never the subject:**
+
+```
+fix: correct arbitrage threshold for SNR bets
+
+The threshold varies with lay odds rather than being fixed at a single
+percentage, so a target safe at long odds is arbitrage at short ones.
+
+Closes #42
+```
+
+`Closes`, `Fixes` and `Resolves` auto-close the issue on merge. `Refs:` links without closing.
+
+They stay out of the subject because GitHub appends the *pull request* number there
+automatically, and issues and pull requests share one numbering sequence — two `#N` references
+in one line would be indistinguishable. The log shows the PR; the PR links the issue.
+
 ## Pull requests
 
 - Link the PR to its issue where one exists
